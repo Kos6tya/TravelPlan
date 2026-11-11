@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304157316305",
+    "project_id": "travelplan-d045e",
+    "storage_bucket": "travelplan-d045e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304157316305:android:c76994de2d630fb62ca1f0",
+        "android_client_info": {
+          "package_name": "com.example.travelplan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDf_YM8edUAN6ZsztbAy-Wkb2rw76aTm00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("org.jetbrains.kotlin.android") // 🔥 ОСЬ ЧОГО БРАКУВАЛО! Без нього нічого не працює.
+    id("org.jetbrains.kotlin.android")
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt") // Офіційна назва плагіна
+    id("org.jetbrains.kotlin.kapt")
     id("kotlin-parcelize")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -48,6 +49,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -61,7 +64,6 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
-    // Бронебійний запис, який точно спрацює:
     add("kapt", "androidx.room:room-compiler:$room_version")
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")

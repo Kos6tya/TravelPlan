@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") } // Додаємо цей рядок для MPAndroidChart
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
