@@ -10,8 +10,8 @@ import kotlinx.coroutines.tasks.await
 class TripRepository(
     private val tripDao: TripDao
 ) {
-    private val firebaseDb = FirebaseDatabase.getInstance().getReference("trips")
-
+    private val firebaseDb = FirebaseDatabase.getInstance("https://travelplan-d045e-default-rtdb.europe-west1.firebasedatabase.app")
+        .getReference("trips")
     fun getAllTrips(): Flow<List<Trip>> {
         return tripDao.getAllTrips().map { entities ->
             entities.map { it.toDomainModel() }
