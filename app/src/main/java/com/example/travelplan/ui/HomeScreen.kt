@@ -17,7 +17,8 @@ import com.example.travelplan.domain.Trip
 @Composable
 fun HomeScreen(
     viewModel: TripViewModel,
-    onTripClick: (Trip) -> Unit
+    onTripClick: (Trip) -> Unit,
+    onAnalyticsClick: (Trip) -> Unit
 ) {
     val trips by viewModel.allTrips.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -70,8 +71,13 @@ fun HomeScreen(
                                 Text("${trip.destination} • Бюджет: $${trip.budget}")
                             },
                             trailingContent = {
-                                IconButton(onClick = { viewModel.deleteTrip(trip) }) {
-                                    Text("🗑", style = MaterialTheme.typography.titleMedium)
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    IconButton(onClick = { onAnalyticsClick(trip) }) {
+                                        Text("📊", style = MaterialTheme.typography.titleMedium)
+                                    }
+                                    IconButton(onClick = { viewModel.deleteTrip(trip) }) {
+                                        Text("🗑", style = MaterialTheme.typography.titleMedium)
+                                    }
                                 }
                             }
                         )
