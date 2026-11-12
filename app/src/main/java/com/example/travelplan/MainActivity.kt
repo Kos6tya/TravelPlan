@@ -3,45 +3,27 @@ package com.example.travelplan
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.travelplan.ui.theme.TravelPlanTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.travelplan.data.TripRepository
+import com.example.travelplan.data.local.AppDatabase
+import com.example.travelplan.ui.HomeScreen
+import com.example.travelplan.ui.TripViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        val db = AppDatabase.getDatabase(this)
+        val repository = TripRepository(db.tripDao())
+
         setContent {
-            TravelPlanTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+            val viewModel: TripViewModel = viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                    return TripViewModel(repository) as T
                 }
-            }
+            })
+
+            HomeScreen(viewModel)
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TravelPlanTheme {
-        Greeting("Android")
     }
 }
