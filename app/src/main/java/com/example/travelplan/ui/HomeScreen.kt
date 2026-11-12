@@ -1,11 +1,13 @@
 package com.example.travelplan.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -13,7 +15,10 @@ import com.example.travelplan.domain.Trip
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: TripViewModel) {
+fun HomeScreen(
+    viewModel: TripViewModel,
+    onTripClick: (Trip) -> Unit
+) {
     val trips by viewModel.allTrips.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
@@ -37,7 +42,7 @@ fun HomeScreen(viewModel: TripViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
-                contentAlignment = androidx.compose.ui.Alignment.Center
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "Поки немає подорожей. Натисніть +, щоб додати!",
@@ -54,7 +59,9 @@ fun HomeScreen(viewModel: TripViewModel) {
             ) {
                 items(trips, key = { it.id }) { trip ->
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onTripClick(trip) },
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
                         ListItem(
@@ -73,7 +80,6 @@ fun HomeScreen(viewModel: TripViewModel) {
             }
         }
 
-        // Вікно додавання нової подорожі
         if (showDialog) {
             AddTripDialog(
                 onDismiss = { showDialog = false },

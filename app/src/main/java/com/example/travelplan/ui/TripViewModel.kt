@@ -1,5 +1,8 @@
 package com.example.travelplan.ui
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelplan.data.TripRepository
@@ -15,6 +18,13 @@ class TripViewModel(private val repository: TripRepository) : ViewModel() {
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList()
     )
+
+    var selectedTrip by mutableStateOf<Trip?>(null)
+        private set
+
+    fun selectTrip(trip: Trip) {
+        selectedTrip = trip
+    }
 
     fun addTrip(trip: Trip) {
         viewModelScope.launch {
