@@ -11,6 +11,7 @@ import com.example.travelplan.data.TripRepository
 import com.example.travelplan.data.local.AppDatabase
 import com.example.travelplan.ui.AnalyticsScreen
 import com.example.travelplan.ui.AuthViewModel
+import com.example.travelplan.ui.ChatScreen
 import com.example.travelplan.ui.HomeScreen
 import com.example.travelplan.ui.LoginScreen
 import com.example.travelplan.ui.MapScreen
@@ -57,6 +58,10 @@ class MainActivity : ComponentActivity() {
                             tripViewModel.selectTrip(trip)
                             navController.navigate("analytics")
                         },
+                        onChatClick = { trip ->
+                            tripViewModel.selectTrip(trip)
+                            navController.navigate("chat")
+                        },
                         onLogoutClick = {
                             authViewModel.signOut()
                             navController.navigate("login") {
@@ -81,6 +86,18 @@ class MainActivity : ComponentActivity() {
                         AnalyticsScreen(
                             tripTitle = trip.title,
                             totalBudget = trip.budget,
+                            viewModel = tripViewModel,
+                            onBackClick = { navController.popBackStack() }
+                        )
+                    }
+                }
+                composable("chat") {
+                    val trip = tripViewModel.selectedTrip
+                    val email = authViewModel.currentUser?.email ?: "Користувач"
+                    if (trip != null) {
+                        ChatScreen(
+                            tripTitle = trip.title,
+                            currentUserEmail = email,
                             viewModel = tripViewModel,
                             onBackClick = { navController.popBackStack() }
                         )

@@ -19,6 +19,7 @@ fun HomeScreen(
     viewModel: TripViewModel,
     onTripClick: (Trip) -> Unit,
     onAnalyticsClick: (Trip) -> Unit,
+    onChatClick: (Trip) -> Unit,
     onLogoutClick: () -> Unit
 ) {
     val trips by viewModel.allTrips.collectAsState()
@@ -78,6 +79,9 @@ fun HomeScreen(
                             },
                             trailingContent = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
+                                    IconButton(onClick = { onChatClick(trip) }) {
+                                        Text("💬", style = MaterialTheme.typography.titleMedium)
+                                    }
                                     IconButton(onClick = { onAnalyticsClick(trip) }) {
                                         Text("📊", style = MaterialTheme.typography.titleMedium)
                                     }
