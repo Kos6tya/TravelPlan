@@ -18,7 +18,8 @@ import com.example.travelplan.domain.Trip
 fun HomeScreen(
     viewModel: TripViewModel,
     onTripClick: (Trip) -> Unit,
-    onAnalyticsClick: (Trip) -> Unit
+    onAnalyticsClick: (Trip) -> Unit,
+    onLogoutClick: () -> Unit
 ) {
     val trips by viewModel.allTrips.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
@@ -27,6 +28,11 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Мої Подорожі 🌍") },
+                actions = {
+                    TextButton(onClick = onLogoutClick) {
+                        Text("Вийти 🚪", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 )

@@ -10,7 +10,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.travelplan.data.TripRepository
 import com.example.travelplan.data.local.AppDatabase
 import com.example.travelplan.ui.AnalyticsScreen
+import com.example.travelplan.ui.AuthViewModel
 import com.example.travelplan.ui.HomeScreen
+import com.example.travelplan.ui.LoginScreen
 import com.example.travelplan.ui.MapScreen
 import com.example.travelplan.ui.TripViewModel
 
@@ -22,30 +24,49 @@ class MainActivity : ComponentActivity() {
         val repository = TripRepository(db.tripDao())
 
         setContent {
-            val viewModel: TripViewModel = viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+            val tripViewModel: TripViewModel = viewModel(factory = object : androidx.lifecycle.ViewModelProvider.Factory {
                 override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                     return TripViewModel(repository) as T
                 }
             })
 
+            val authViewModel: AuthViewModel = viewModel()
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = "home") {
+            val startDestination = if (authViewModel.currentUser != null) "home" else "login"
+
+            NavHost(navController = navController, startDestination = startDestination) {
+                composable("login") {
+                    LoginScreen(
+                        authViewModel = authViewModel,
+                        onAuthSuccess = {
+                            navController.navigate("home") {
+                                popUpTo("login") { inclusive = true }
+                            }
+                        }
+                    )
+                }
                 composable("home") {
                     HomeScreen(
-                        viewModel = viewModel,
+                        viewModel = tripViewModel,
                         onTripClick = { trip ->
-                            viewModel.selectTrip(trip)
+                            tripViewModel.selectTrip(trip)
                             navController.navigate("map")
                         },
                         onAnalyticsClick = { trip ->
-                            viewModel.selectTrip(trip)
+                            tripViewModel.selectTrip(trip)
                             navController.navigate("analytics")
+                        },
+                        onLogoutClick = {
+                            authViewModel.signOut()
+                            navController.navigate("login") {
+                                popUpTo(0)
+                            }
                         }
                     )
                 }
                 composable("map") {
-                    val trip = viewModel.selectedTrip
+                    val trip = tripViewModel.selectedTrip
                     if (trip != null) {
                         MapScreen(
                             tripTitle = trip.title,
@@ -55,12 +76,12 @@ class MainActivity : ComponentActivity() {
                     }
                 }
                 composable("analytics") {
-                    val trip = viewModel.selectedTrip
+                    val trip = tripViewModel.selectedTrip
                     if (trip != null) {
                         AnalyticsScreen(
                             tripTitle = trip.title,
                             totalBudget = trip.budget,
-                            viewModel = viewModel,
+                            viewModel = tripViewModel,
                             onBackClick = { navController.popBackStack() }
                         )
                     }
